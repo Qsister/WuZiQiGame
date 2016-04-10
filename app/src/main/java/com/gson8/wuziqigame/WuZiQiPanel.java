@@ -8,6 +8,7 @@ package com.gson8.wuziqigame;
  */
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -32,20 +33,24 @@ public class WuZiQiPanel extends View
 
     private float radioPieceLineHeight = 3 * 1.0f / 4;
 
-
     private boolean mIsGameOver;
+    private boolean isFristPlay = true;
+
     /**
      * 到白下载了 或者白先下
      */
-    private boolean mIsWhiteWinner = false;
+    private boolean mIsWhiteWinner = true;
 
     private Paint mPaint = new Paint();
 
+    private int mLineSize = 1;
+    private int mLineColor = 0x88000000;
     private ArrayList<Point> mWhiteArray = new ArrayList<>();
     private ArrayList<Point> mBlackArray = new ArrayList<>();
 
-    private int MAN_LINE = 6;
+    private int MAN_LINE = 10;
     private static int MAX_COUNT_IN_LINE = 5;
+
 
     public static int getMaxCountInLine()
     {
@@ -79,18 +84,31 @@ public class WuZiQiPanel extends View
     {
         super(context, attrs, defStyleAttr);
         init();
+        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.WuZiQiPanel);
+        isFristPlay = ta.getBoolean(R.styleable.WuZiQiPanel_firstPlay, mIsWhiteWinner);
+        MAN_LINE = ta.getInteger(R.styleable.WuZiQiPanel_chessBoardLineCount, MAN_LINE);
+        MAX_COUNT_IN_LINE = ta.getInteger(R.styleable.WuZiQiPanel_chessCount, MAX_COUNT_IN_LINE);
+        mLineColor = ta.getColor(R.styleable.WuZiQiPanel_lineColor, mLineColor);
+        mLineSize = ta.getDimensionPixelSize(R.styleable.WuZiQiPanel_lineSize, mLineSize);
+
+        mWhitePiece = BitmapFactory.decodeResource(getResources(),
+                ta.getResourceId(R.styleable.WuZiQiPanel_whiteRes, R.drawable.stone_w2));
+        mBlackPiece = BitmapFactory.decodeResource(getResources(),
+                ta.getResourceId(R.styleable.WuZiQiPanel_blackRes, R.drawable.stone_b1));
+        ta.recycle();
+        mIsWhiteWinner = isFristPlay;
+
+        init();
     }
+
 
     private void init()
     {
-        mPaint.setColor(0x88000000);
+        mPaint.setColor(mLineColor);
+        mPaint.setStrokeWidth(mLineSize);
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
         mPaint.setStyle(Paint.Style.STROKE);
-
-        mWhitePiece = BitmapFactory.decodeResource(getResources(), R.drawable.stone_w2);
-        mBlackPiece = BitmapFactory.decodeResource(getResources(), R.drawable.stone_b1);
-
     }
 
     @Override
@@ -320,6 +338,7 @@ public class WuZiQiPanel extends View
         mBlackArray.clear();
         mIsWhiteWinner = false;
         mIsGameOver = false;
+        mIsWhiteWinner = isFristPlay;
         invalidate();
     }
 }
