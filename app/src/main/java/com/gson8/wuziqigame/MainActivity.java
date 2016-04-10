@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
 
         mToolbar = (Toolbar)findViewById(R.id.toolbar);
         tvDis = (TextView)findViewById(R.id.tv_dis);
+
         mWuZiQiPanel = (WuZiQiPanel)findViewById(R.id.wzq);
 
         mToolbar.inflateMenu(R.menu.menu_wu);
@@ -100,6 +101,10 @@ public class MainActivity extends AppCompatActivity implements Toolbar.OnMenuIte
         {
             mWuZiQiPanel.reStart();
             return true;
+        }
+        else if(item.getItemId() == R.id.action_pre)
+        {
+            mWuZiQiPanel.pre();
         }
         return false;
     }

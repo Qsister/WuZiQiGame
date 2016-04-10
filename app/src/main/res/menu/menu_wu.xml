@@ -5,4 +5,7 @@
         android:icon="@drawable/ic_replay"
         android:showAsAction="ifRoom"
         android:title="@string/string_restart"/>
+    <item
+        android:id="@+id/action_pre"
+        android:title="悔棋"/>
 </menu>

@@ -35,6 +35,9 @@ attr.xml
         <attr name="lineSize"/>
     </declare-styleable>
 ```
+
+##添加悔棋
+
 ##图片
 ![](MyPic/aa.gif)
 ![](MyPic/bb.gif)

@@ -341,6 +341,33 @@ public class WuZiQiPanel extends View
         mIsWhiteWinner = isFristPlay;
         invalidate();
     }
+
+
+    /**
+     * 悔棋功能
+     */
+    public void pre()
+        {
+        if(mIsWhiteWinner)
+        {
+            if(mBlackArray.size() > 0)
+            {
+                mBlackArray.remove(mBlackArray.size() - 1);
+                mIsWhiteWinner = !mIsWhiteWinner;
+            }
+        }
+        else
+        {
+            if(mWhiteArray.size() > 0)
+            {
+                mWhiteArray.remove(mWhiteArray.size() - 1);
+                mIsWhiteWinner = !mIsWhiteWinner;
+            }
+        }
+        invalidate();
+    }
+
+
 }
 
 
