@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="backGround" format="color|reference"/>
+    <attr name="firstPlay" format="boolean"/>
+    <attr name="chessBoardLine" format="integer"/>
+    <attr name="chessCount" format="integer"/>
+
+    <declare-styleable name="WuZiQiPanel">
+        <attr name="backGround"/>
+        <attr name="firstPlay"/>
+        <attr name="chessBoardLine"/>
+        <attr name="chessCount"/>
+    </declare-styleable>
+
+</resources>
