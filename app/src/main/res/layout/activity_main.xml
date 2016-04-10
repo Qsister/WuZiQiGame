@@ -25,14 +25,19 @@
         android:textAlignment="center"
         android:textColor="#000"/>
 
-    <com.gson8.wuziqigame.WuZiQiPanel
-        android:id="@+id/wzq"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        app:chessBoardLineCount="10"
-        app:lineColor="#000000"
-        app:lineSize="1px"/>
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
+        <com.gson8.wuziqigame.WuZiQiPanel
+            android:id="@+id/wzq"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            app:chessBoardLineCount="10"
+            app:lineColor="#000000"
+            app:lineSize="1px"/>
+    </RelativeLayout>
 
 </LinearLayout>
