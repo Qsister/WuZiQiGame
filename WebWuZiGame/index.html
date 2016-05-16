@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>人机对战-五子棋</title>
+    <style type="text/css">
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .ch {
+            display: block;
+            background-color: beige;
+            margin: 50px auto;
+        }
+
+        .tip {
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            font-size: 32px;
+            margin: 0 auto;
+        }
+
+        .tips {
+            height: 50px;
+            font-size: 32px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+<div class="tip">你是白棋(先下),计算机是黑棋</div>
+
+<canvas class="ch" id="chess" width="450" height="450">
+    你的浏览器不支持HTML5
+</canvas>
+
+
+<script>
+    var wins = [];
+    var mywin = [];
+    var computerwin = [];
+
+    var arr = [];
+
+    var width = 450;
+
+    var line = 15;      //15*15
+    var radius = 15;    // 外边距,
+    var lineMargin = 30;     //两线的边距
+    var me = true;
+
+    var over = false;
+    var count = 0;
+    var c = document.getElementById("chess");
+    var ctx = c.getContext("2d");
+    ctx.strokeStyle = "#666";
+
+    for(var i = 0; i < line; i++){
+        wins[i] = [];
+        for(var j = 0; j < line; j++){
+            wins[i][j] = [];
+        }
+    }
+
+    //横线
+    for(var i = 0; i < 15; i++){
+        for(var j = 0; j < 11; j++){
+            for(var k = 0; k < 5; k++){
+                wins[i][j + k][count] = true;
+            }
+            count++;
+        }
+    }
+
+    //竖线
+    for(var i = 0; i < 15; i++){
+        for(var j = 0; j < 11; j++){
+            for(var k = 0; k < 5; k++){
+                wins[j + k][i][count] = true;
+            }
+            count++;
+        }
+    }
+    //  \ 线
+    for(var i = 0; i < 11; i++){
+        for(var j = 0; j < 11; j++){
+            for(var k = 0; k < 5; k++){
+                wins[i + k][j + k][count] = true;
+            }
+            count++;
+        }
+    }
+
+    // / 线
+    for(var i = 0; i < 11; i++){
+        for(var j = 14; j > 3; j--){
+            for(var k = 0; k < 5; k++){
+                wins[i + k][j - k][count] = true;
+            }
+            count++;
+        }
+    }
+
+    for(var i = 0; i < count; i++){
+        mywin[i] = 0;
+        computerwin[i] = 0;
+    }
+
+
+    // 存棋用的数组
+    for(var i = 0; i < line; i++){
+        arr[i] = [];
+        for(var j = 0; j < line; j++){
+            arr[i][j] = 0;
+        }
+    }
+
+    //画棋盘
+    for(var i = 0; i < line; i++){
+        ctx.moveTo(radius, radius + i * lineMargin);
+        ctx.lineTo(width - radius, radius + i * lineMargin);
+        ctx.stroke();
+
+        ctx.moveTo(radius + i * lineMargin, radius);
+        ctx.lineTo(radius + i * lineMargin, width - radius);
+        ctx.stroke();
+    }
+
+
+    function onStep(i, j, me){
+        ctx.beginPath();
+
+        if(me){
+            ctx.fillStyle = "#fff";
+        } else{
+            ctx.fillStyle = "#000";
+        }
+        arr[i][j] = 1;
+
+        ctx.arc(radius + i * lineMargin, radius + j * lineMargin, radius - 2, 0, Math.PI * 2, false);
+        ctx.fill();
+    }
+
+    c.onclick = function(e){
+        if(over)
+            return;
+
+        if(!me)
+            return;
+
+        var i = Math.floor(e.offsetX / 30);
+        var j = Math.floor(e.offsetY / 30);
+
+        if(arr[i][j] == 0){
+            onStep(i, j, me);
+            for(var k = 0; k < count; k++){
+                if(wins[i][j][k]){
+                    mywin[k]++;
+                    computerwin[k] = 6;
+
+                    if(mywin[k] == 5){
+                        alert("你赢了!!");
+                        over = true;
+                    }
+                }
+            }
+            if(!over){
+                me = !me;
+                computerAI();
+            }
+
+        }
+
+    }
+
+
+    var computerAI = function(){
+        var mySource = [];
+        var computerSource = [];
+
+        var max = 0;
+        var u = 0, v = 0;
+
+        for(var i = 0; i < 15; i++){
+            mySource[i] = [];
+            computerSource[i] = [];
+            for(var j = 0; j < 15; j++){
+                mySource[i][j] = 0;
+                computerSource[i][j] = 0;
+            }
+        }
+
+        for(var i = 0; i < 15; i++){
+            for(var j = 0; j < 15; j++){
+                if(arr[i][j] == 0){
+                    for(var k = 0; k < count; k++){
+                        if(wins[i][j][k]){
+                            if(mywin[k] == 1){
+                                mySource[i][j] += 200;
+                            } else if(mywin[k] == 2){
+                                mySource[i][j] += 400;
+                            } else if(mywin[k] == 3){
+                                mySource[i][j] += 2000;
+                            } else if(mywin[k] == 4){
+                                mySource[i][j] += 10000;
+                            }
+
+                            if(computerwin[k] == 1){
+                                computerSource[i][j] += 200;
+                            } else if(computerwin[k] == 2){
+                                computerSource[i][j] += 400;
+                            } else if(computerwin[k] == 3){
+                                computerSource[i][j] += 2000;
+                            } else if(computerwin[k] == 4){
+                                computerSource[i][j] += 10000;
+                            }
+                        }
+                    }
+
+
+                    if(mySource[i][j] > max){
+                        max = mySource[i][j];
+                        u = i;
+                        v = j;
+                    } else if(mySource[i][j] == max){
+                        if(computerSource[i][j] > computerSource[u][v]){
+                            u = i;
+                            v = j;
+                        }
+                    }
+
+
+                    if(computerSource[i][j] > max){
+                        max = computerSource[i][j];
+                        u = i;
+                        v = j;
+                    } else if(computerSource[i][j] == max){
+                        if(mySource[i][j] > mySource[u][v]){
+                            u = i;
+                            v = j;
+                        }
+                    }
+
+                }
+            }
+        }
+
+        onStep(u, v, false);
+        arr[u][v] = 2;
+
+        for(var k = 0; k < count; k++){
+            if(wins[u][v][k]){
+                computerwin[k]++;
+                mywin[k] = 6;
+
+                if(computerwin[k] == 5){
+                    alert("计算机赢了");
+                    over = true;
+                }
+            }
+        }
+        if(!over){
+            me = !me;
+        }
+    }
+
+</script>
+
+</body>
+</html>

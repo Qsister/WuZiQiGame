@@ -41,3 +41,6 @@ attr.xml
 ##图片
 ![](MyPic/aa.gif)
 ![](MyPic/bb.gif)
+
+## 添加WEB版五子棋
+地址:http://web.gson8.com/
