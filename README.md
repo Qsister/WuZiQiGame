@@ -43,4 +43,4 @@ attr.xml
 ![](MyPic/bb.gif)
 
 ## 添加WEB版五子棋
-地址:http://web.gson8.com/
+### 地址:[http://web.gson8.com/WebWuZiGame/index.html](http://web.gson8.com/WebWuZiGame/index.html)
